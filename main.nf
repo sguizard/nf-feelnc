@@ -38,6 +38,9 @@ if (error) exit(1, error)
 
 // INCLUDE WORKFLOWS -----------------------------------------------------------
 
+include {
+    CREATE_CHANNELS
+} from './workflows/create_channels.nf'
 
 // INCLUDE MODULES -------------------------------------------------------------
 
@@ -61,13 +64,13 @@ workflow {
   channel_genome =
     CREATE_CHANNELS.out.channel_genome
 
-  // one annotation
+  // one ref annotation
   channel_ref_annotation =
-    CREATE_CHANNELS.out.channel_reference_annotation
+    CREATE_CHANNELS.out.channel_ref_annotation
 
-  // one annotation
-  channel_ref_annotation =
-    CREATE_CHANNELS.out.channel_reference_annotation
+  // one new annotation
+  channel_new_annotation =
+    CREATE_CHANNELS.out.channel_new_annotation
 
   // each [reports]
   channel_reports =
@@ -80,8 +83,8 @@ workflow {
     // one genome & reference_annotation & novel_annotation => [reports]
     FEELNC_classify_transcripts(
       channel_genome,
-      channel_reference_annotation,
-      channel_novel_annotation
+      channel_ref_annotation,
+      channel_new_annotation
     )
 
     // each [reports]
