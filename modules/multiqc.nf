@@ -3,7 +3,7 @@ process MULTIQC_generate_report {
   label 'memory_8'
 
   publishDir = [
-    path: params.output + '/control',
+    path: 'results' + '/control',
     mode: 'copy'
   ]
 

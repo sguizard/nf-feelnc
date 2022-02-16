@@ -10,11 +10,11 @@ params.genome =
 
 params.ref_annotation =
   params.containsKey('ref_annotation') ?
-  params.annotation : ''
+  params.ref_annotation : ''
 
 params.new_annotation =
   params.containsKey('new_annotation') ?
-  params.annotation : ''
+  params.new_annotation : ''
 
 params.feelnc_args =
   params.containsKey('feelnc-args') ?
@@ -78,19 +78,16 @@ workflow {
 
   // DETECT LONG NON-CODING TRANSCRIPTS ----------------------------------------
 
-  if (!params.skip_feelnc && !params.skip_assembly) {
+  // one genome & reference_annotation & novel_annotation => [reports]
+  FEELNC_classify_transcripts(
+    channel_genome,
+    channel_ref_annotation,
+    channel_new_annotation
+  )
 
-    // one genome & reference_annotation & novel_annotation => [reports]
-    FEELNC_classify_transcripts(
-      channel_genome,
-      channel_ref_annotation,
-      channel_new_annotation
-    )
-
-    // each [reports]
-    channel_reports =
-      channel_reports.mix(FEELNC_classify_transcripts.out.reports)
-  }
+  // each [reports]
+  channel_reports =
+    channel_reports.mix(FEELNC_classify_transcripts.out.reports)
 
   // GENERATE HTML REPORT ------------------------------------------------------
 
@@ -105,6 +102,6 @@ workflow {
       projectDir + '/assets/multiqc/custom_images.tsv',
       checkIfExists: true
     ),
-    params.metadata ? Channel.fromPath(params.metadata) : []
+    []
   )
 }
