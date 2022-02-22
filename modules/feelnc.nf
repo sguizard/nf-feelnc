@@ -1,6 +1,6 @@
 process FEELNC_classify_transcripts {
 
-  label 'memory_16'
+  label 'memory_64'
 
   publishDir = [
     path: 'results',
