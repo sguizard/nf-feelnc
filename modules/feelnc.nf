@@ -35,16 +35,10 @@ process FEELNC_classify_transcripts {
     script=$(which FEELnc_codpot.pl)
     export FEELNCPATH=${script%/*}/..
 
-    FEELnc_filter.pl \\
-      --mRNAfile !{reference_annotation} \\
-      --infile !{novel_annotation} \\
-      --biotype transcript_biotype=protein_coding \\
-      > candidate_transcripts.gtf
-
     FEELnc_codpot.pl \\
       --genome !{genome} \\
       --mRNAfile !{reference_annotation} \\
-      --infile candidate_transcripts.gtf \\
+      --infile !{novel_annotation} \\
       --biotype transcript_biotype=protein_coding \\
       --numtx 5000,5000 \\
       --kmer 1,2,3,6,9,12 \\
