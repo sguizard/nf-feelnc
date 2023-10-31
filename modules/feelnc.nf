@@ -1,6 +1,6 @@
 process FEELNC_classify_transcripts {
 
-  label 'memory_16'
+  label 'memory_64'
 
   publishDir = [
     path: 'results',
@@ -116,9 +116,12 @@ process FEELNC_classify_transcripts {
 
     # Filter coding transcripts for lnc-messenger interactions
     grep \\
+      -h \\
       -E '#|transcript_biotype "protein_coding"|feelnc_biotype "mRNA"' \\
-      !{reference_annotation} \\
+      !{reference_annotation} updated.gtf \\
       > coding_transcripts.gtf
+
+    sort -n -k 1,1 -k4,4 -k5,5 -o coding_transcripts_sort.gtf coding_transcripts.gtf
 
     ## Filter coding transcripts for lnc-messenger interactions
     #grep \\
@@ -127,7 +130,7 @@ process FEELNC_classify_transcripts {
     #  > coding_transcripts.gtf
 
     FEELnc_classifier.pl \\
-      --mrna coding_transcripts.gtf \\
+      --mrna coding_transcripts_sort.gtf \\
       --lncrna exons.lncRNA.gtf \\
       > lncRNA_classes.txt
 
