@@ -1,6 +1,7 @@
 process FEELNC_classify_transcripts {
 
   label 'memory_64'
+  container 'https://depot.galaxyproject.org/singularity/feelnc%3A0.2--pl526_0'
 
   publishDir = [
     path: 'results',
