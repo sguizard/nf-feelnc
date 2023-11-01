@@ -50,7 +50,7 @@ process FEELNC_classify_transcripts {
       '!{params.feelnc_args}'
 
     # Update annotation with new biotypes
-    cp "$(readlink -m !{novel_annotation})" updated.gtf
+    cp "$(readlink -f !{novel_annotation})" updated.gtf
     for biotype in lncRNA mRNA noORF TUCp; do
       [[ -f exons."$biotype".gtf ]] || continue
 
